@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useAuth } from '../../context/AuthContext';
+import logoImg from '../../assets/logo.png';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
@@ -27,7 +28,7 @@ export default function Sidebar({ onClose }) {
     <div className="flex h-full w-64 flex-col bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transition-colors duration-200">
       <div className="flex h-16 shrink-0 items-center px-6 border-b border-slate-200 dark:border-slate-800">
         <div className="flex items-center gap-2">
-          <img src="/src/assets/logo.png" alt="JUMS Logo" className="h-10 w-auto object-contain" />
+          <img src={logoImg} alt="JUMS Logo" className="h-10 w-auto object-contain" />
         </div>
       </div>
 

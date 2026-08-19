@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Mail, Lock, Loader2 } from 'lucide-react';
+import logoImg from '../assets/logo.png';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -36,7 +37,7 @@ export default function Login() {
           {/* Logo and Header */}
           <div className="flex flex-col items-center mb-8">
             <div className="w-20 h-20 bg-white dark:bg-navy-800 rounded-2xl flex items-center justify-center shadow-lg mb-6 ring-1 ring-slate-100 dark:ring-navy-700">
-              <img src="/src/assets/logo.png" alt="JUMS Logo" className="h-12 w-auto object-contain" />
+              <img src={logoImg} alt="JUMS Logo" className="h-12 w-auto object-contain" />
             </div>
             <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Welcome Back</h1>
             <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 text-center">
