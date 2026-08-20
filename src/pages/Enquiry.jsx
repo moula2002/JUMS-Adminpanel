@@ -35,10 +35,7 @@ export default function Enquiry() {
       }
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        console.warn('Enquiries API endpoint not found on the server yet. Please ensure the backend is deployed.');
         setEnquiries([]);
-      } else {
-        console.error('Error fetching enquiries:', error);
       }
     } finally {
       setLoading(false);

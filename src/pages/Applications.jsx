@@ -33,10 +33,7 @@ export default function Applications() {
       }
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        console.warn('Applications API endpoint not found on the server yet. Please ensure the backend is deployed.');
         setApplications([]);
-      } else {
-        console.error('Error fetching applications:', error);
       }
     } finally {
       setLoading(false);
