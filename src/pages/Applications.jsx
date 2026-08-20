@@ -6,7 +6,8 @@ import {
   Trash2,
   CheckCircle,
   FileText,
-  Mail
+  Mail,
+  Download
 } from 'lucide-react';
 import axios from 'axios';
 
@@ -245,9 +246,11 @@ export default function Applications() {
                         href={`https://jums-sever.onrender.com${selectedApplication.resumePath.startsWith('/') || selectedApplication.resumePath.startsWith('\\') ? '' : '/'}${selectedApplication.resumePath.replace(/\\/g, '/')}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs font-semibold px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors whitespace-nowrap ml-auto flex-shrink-0 shadow-sm"
+                        download
+                        className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors whitespace-nowrap ml-auto flex-shrink-0 shadow-sm"
                       >
-                        Open Resume
+                        <Download className="w-3.5 h-3.5" />
+                        Download
                       </a>
                     )}
                   </div>
@@ -255,15 +258,14 @@ export default function Applications() {
               </div>
 
               <div className="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex justify-end">
-                <button
-                  onClick={() => {
-                    window.location.href = `mailto:${selectedApplication.email}?subject=Regarding your application for ${selectedApplication.jobTitle}`;
-                    updateStatus(selectedApplication._id, 'Replied');
-                  }}
-                  className="flex items-center gap-2 px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-medium transition-all shadow-sm shadow-brand-500/20">
+                <a
+                  href={`mailto:${selectedApplication.email}?subject=${encodeURIComponent('Regarding your application for ' + selectedApplication.jobTitle)}`}
+                  onClick={() => updateStatus(selectedApplication._id, 'Replied')}
+                  className="flex items-center gap-2 px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-medium transition-all shadow-sm shadow-brand-500/20"
+                >
                   <Mail className="w-4 h-4" />
                   Contact Candidate
-                </button>
+                </a>
               </div>
             </>
           ) : (
