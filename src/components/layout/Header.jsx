@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Bell, Moon, Sun, Menu } from 'lucide-react';
+import { Search, Bell, Moon, Sun, Menu, User } from 'lucide-react';
 import { cn } from '../../lib/utils';
+import { useAuth } from '../../context/AuthContext';
 
 export default function Header({ toggleSidebar }) {
   const [isDark, setIsDark] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     // Check initial system preference or saved preference
@@ -69,14 +71,18 @@ export default function Header({ toggleSidebar }) {
           <div className="relative">
             <button type="button" className="-m-1.5 flex items-center p-1.5 hover:opacity-80 transition-opacity">
               <span className="sr-only">Open user menu</span>
-              <img
-                className="h-8 w-8 rounded-full bg-slate-50 dark:bg-slate-800 object-cover ring-2 ring-slate-200 dark:ring-slate-700"
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                alt=""
-              />
+              {user?.name ? (
+                <div className="h-8 w-8 rounded-full bg-brand-100 dark:bg-brand-900/50 flex items-center justify-center text-brand-600 dark:text-brand-400 font-bold text-sm ring-2 ring-slate-200 dark:ring-slate-700 uppercase">
+                  {user.name.charAt(0)}
+                </div>
+              ) : (
+                <div className="h-8 w-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 ring-2 ring-slate-200 dark:ring-slate-700">
+                  <User className="h-4 w-4" />
+                </div>
+              )}
               <span className="hidden lg:flex lg:items-center">
                 <span className="ml-4 text-sm font-semibold leading-6 text-slate-900 dark:text-white" aria-hidden="true">
-                  Tom Cook
+                  {user?.name || 'Admin User'}
                 </span>
               </span>
             </button>

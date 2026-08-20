@@ -2,6 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Users, CreditCard, Activity, ArrowUpRight, Briefcase } from 'lucide-react';
 import StatCard from '../components/ui/StatCard';
 import axios from 'axios';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+const chartData = [
+  { name: 'Jan', applications: 400, enquiries: 240 },
+  { name: 'Feb', applications: 300, enquiries: 139 },
+  { name: 'Mar', applications: 200, enquiries: 980 },
+  { name: 'Apr', applications: 278, enquiries: 390 },
+  { name: 'May', applications: 189, enquiries: 480 },
+  { name: 'Jun', applications: 239, enquiries: 380 },
+  { name: 'Jul', applications: 349, enquiries: 430 },
+];
 
 const IconMap = {
   CreditCard,
@@ -53,14 +64,35 @@ export default function Dashboard() {
 
         {/* Main Content Area */}
         <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
-          {/* Chart Placeholder */}
+          {/* Chart Section */}
           <div className="rounded-xl bg-white dark:bg-slate-900 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 p-6 flex flex-col min-h-[400px]">
-            <h2 className="text-lg font-medium text-slate-900 dark:text-white mb-4">Revenue Overview</h2>
-            <div className="flex-1 rounded-lg border-2 border-dashed border-slate-200 dark:border-slate-800 flex items-center justify-center">
-              <p className="text-slate-500 dark:text-slate-400 text-sm flex items-center gap-2">
-                <Activity className="h-4 w-4" />
-                Chart visualization goes here
-              </p>
+            <h2 className="text-lg font-medium text-slate-900 dark:text-white mb-4">Platform Engagement Overview</h2>
+            <div className="flex-1 w-full mt-2">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart
+                  data={chartData}
+                  margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                >
+                  <defs>
+                    <linearGradient id="colorApps" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="colorEnqs" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 12}} dy={10} />
+                  <YAxis axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 12}} dx={-10} />
+                  <Tooltip 
+                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                  />
+                  <Area type="monotone" dataKey="applications" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#colorApps)" name="Applications" />
+                  <Area type="monotone" dataKey="enquiries" stroke="#10b981" strokeWidth={2} fillOpacity={1} fill="url(#colorEnqs)" name="Enquiries" />
+                </AreaChart>
+              </ResponsiveContainer>
             </div>
           </div>
 

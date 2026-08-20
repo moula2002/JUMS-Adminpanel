@@ -237,10 +237,19 @@ export default function Applications() {
                   <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-2">Attached Resume</h3>
                   <div className="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/20 rounded-lg max-w-md">
                     <FileText className="w-5 h-5 text-blue-500" />
-                    <span className="text-sm text-blue-700 dark:text-blue-300 font-medium truncate">
-                      {selectedApplication.resumePath || 'No resume file details saved.'}
+                    <span className="text-sm text-blue-700 dark:text-blue-300 font-medium break-all flex-1">
+                      {selectedApplication.resumePath ? selectedApplication.resumePath.split('/').pop().split('\\').pop() : 'No resume file details saved.'}
                     </span>
-                    <span className="text-xs text-slate-400 ml-auto flex-shrink-0">(Sent via Email)</span>
+                    {selectedApplication.resumePath && (
+                      <a
+                        href={`https://jums-sever.onrender.com${selectedApplication.resumePath.startsWith('/') || selectedApplication.resumePath.startsWith('\\') ? '' : '/'}${selectedApplication.resumePath.replace(/\\/g, '/')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs font-semibold px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors whitespace-nowrap ml-auto flex-shrink-0 shadow-sm"
+                      >
+                        Open Resume
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
