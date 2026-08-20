@@ -8,7 +8,8 @@ import {
   MoreVertical,
   CheckCircle,
   Eye,
-  Mail
+  Mail,
+  ArrowLeft
 } from 'lucide-react';
 import axios from 'axios';
 
@@ -18,6 +19,7 @@ export default function Enquiry() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedEnquiry, setSelectedEnquiry] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showDetailMobile, setShowDetailMobile] = useState(false);
 
   useEffect(() => {
     fetchEnquiries();
@@ -62,6 +64,7 @@ export default function Enquiry() {
       setEnquiries(updated);
       if (selectedEnquiry && selectedEnquiry._id === id) {
         setSelectedEnquiry(updated.length > 0 ? updated[0] : null);
+        setShowDetailMobile(false);
       }
     } catch (error) {
       console.error('Error deleting enquiry:', error);
@@ -82,9 +85,9 @@ export default function Enquiry() {
   };
 
   return (
-    <div className="p-6 lg:p-8 w-full max-w-7xl mx-auto h-[calc(100vh-64px)] flex flex-col">
+    <div className="p-4 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto h-[calc(100vh-64px)] flex flex-col">
       {/* Header Section */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+      <div className={`flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 ${showDetailMobile ? 'hidden lg:flex' : 'flex'}`}>
         <div>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
             <MessageSquare className="w-6 h-6 text-brand-600 dark:text-brand-400" />
@@ -94,9 +97,9 @@ export default function Enquiry() {
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6 h-[calc(100%-100px)]">
+      <div className="flex flex-col lg:flex-row gap-6 h-full lg:h-[calc(100%-100px)] overflow-hidden">
         {/* Left Sidebar - Filters & List */}
-        <div className="w-full lg:w-1/3 flex flex-col gap-4">
+        <div className={`w-full lg:w-1/3 flex-col gap-4 h-full ${showDetailMobile ? 'hidden lg:flex' : 'flex'}`}>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Search className="h-5 w-5 text-slate-400" />
@@ -110,12 +113,12 @@ export default function Enquiry() {
             />
           </div>
 
-          <div className="flex gap-2 p-1 bg-slate-100 dark:bg-slate-900/50 rounded-lg border border-slate-200 dark:border-slate-800">
+          <div className="flex gap-2 p-1 bg-slate-100 dark:bg-slate-900/50 rounded-lg border border-slate-200 dark:border-slate-800 overflow-x-auto hide-scrollbar">
             {['all', 'new', 'viewed', 'replied'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-all capitalize ${activeTab === tab
+                className={`flex-1 min-w-[70px] py-1.5 text-sm font-medium rounded-md transition-all capitalize ${activeTab === tab
                     ? 'bg-white dark:bg-slate-800 text-brand-600 dark:text-brand-400 shadow-sm'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-slate-800/50'
                   }`}
@@ -125,9 +128,9 @@ export default function Enquiry() {
             ))}
           </div>
 
-          <div className="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
+          <div className="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar pb-20 lg:pb-0">
             {loading ? (
-              <div className="text-center text-slate-500 mt-10">Loading...</div>
+              <div className="text-center text-slate-500 mt-10 flex items-center justify-center gap-2">Loading...</div>
             ) : filteredEnquiries.length === 0 ? (
               <div className="text-center text-slate-500 mt-10">No enquiries found.</div>
             ) : (
@@ -136,12 +139,13 @@ export default function Enquiry() {
                   key={enquiry._id}
                   onClick={() => {
                     setSelectedEnquiry(enquiry);
+                    setShowDetailMobile(true);
                     if (enquiry.status === 'New') {
                       updateStatus(enquiry._id, 'Viewed');
                     }
                   }}
                   className={`p-4 rounded-xl border transition-all cursor-pointer group ${selectedEnquiry?._id === enquiry._id
-                      ? 'bg-brand-50 dark:bg-brand-900/20 border-brand-200 dark:border-brand-800'
+                      ? 'bg-brand-50 dark:bg-brand-900/20 border-brand-200 dark:border-brand-800 lg:ring-1 lg:ring-brand-500/50'
                       : (enquiry.status === 'New'
                         ? 'bg-white dark:bg-slate-900 border-brand-100 dark:border-brand-900/50 shadow-sm'
                         : 'bg-slate-50/50 dark:bg-slate-900/20 border-slate-200 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-900')
@@ -149,8 +153,8 @@ export default function Enquiry() {
                 >
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex items-center gap-2">
-                      <span className={`w-2 h-2 rounded-full ${enquiry.status === 'New' ? 'bg-brand-500' : 'bg-transparent'}`} />
-                      <h3 className={`text-sm font-semibold ${enquiry.status === 'New' ? 'text-slate-900 dark:text-white' : 'text-slate-700 dark:text-slate-300'}`}>
+                      <span className={`w-2 h-2 rounded-full flex-shrink-0 ${enquiry.status === 'New' ? 'bg-brand-500' : 'bg-transparent'}`} />
+                      <h3 className={`text-sm font-semibold truncate max-w-[150px] sm:max-w-[200px] ${enquiry.status === 'New' ? 'text-slate-900 dark:text-white' : 'text-slate-700 dark:text-slate-300'}`}>
                         {enquiry.name}
                       </h3>
                     </div>
@@ -158,8 +162,8 @@ export default function Enquiry() {
                       {formatDate(enquiry.createdAt)}
                     </span>
                   </div>
-                  <h4 className="text-sm font-medium text-slate-900 dark:text-white mb-1 truncate">{enquiry.subject || 'No Subject'}</h4>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">{enquiry.message}</p>
+                  <h4 className="text-sm font-medium text-slate-900 dark:text-white mb-1 truncate pl-4">{enquiry.subject || 'No Subject'}</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed pl-4">{enquiry.message}</p>
                 </div>
               ))
             )}
@@ -167,27 +171,33 @@ export default function Enquiry() {
         </div>
 
         {/* Right Content - Message View */}
-        <div className="hidden lg:flex w-full lg:w-2/3 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex-col overflow-hidden">
+        <div className={`w-full lg:w-2/3 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex-col overflow-hidden h-full ${showDetailMobile ? 'flex' : 'hidden lg:flex'}`}>
           {selectedEnquiry ? (
             <>
               {/* Message Header */}
-              <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-start bg-slate-50/50 dark:bg-slate-900/50">
-                <div>
-                  <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">{selectedEnquiry.subject || 'No Subject'}</h2>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 dark:text-brand-400 font-bold text-lg">
-                      {selectedEnquiry.name?.charAt(0) || '?'}
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold text-slate-900 dark:text-white">{selectedEnquiry.name}</div>
-                      <div className="text-xs text-slate-500 flex gap-3">
-                        <span><a href={`mailto:${selectedEnquiry.email}`} className="hover:text-brand-500">{selectedEnquiry.email}</a></span>
-                        {selectedEnquiry.phone && <span><a href={`tel:${selectedEnquiry.phone}`} className="hover:text-brand-500">{selectedEnquiry.phone}</a></span>}
+              <div className="p-4 sm:p-6 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-start bg-slate-50/50 dark:bg-slate-900/50 gap-4">
+                <div className="w-full flex items-start gap-3">
+                  <button onClick={() => setShowDetailMobile(false)} className="lg:hidden mt-1 p-1 -ml-2 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 rounded-md">
+                    <ArrowLeft className="w-5 h-5" />
+                  </button>
+                  <div className="flex-1">
+                    <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-3 leading-tight">{selectedEnquiry.subject || 'No Subject'}</h2>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-500 to-brand-400 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                        {selectedEnquiry.name?.charAt(0) || '?'}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-sm font-semibold text-slate-900 dark:text-white truncate">{selectedEnquiry.name}</div>
+                        <div className="text-xs text-slate-500 flex flex-col sm:flex-row gap-1 sm:gap-3 mt-0.5">
+                          <a href={`mailto:${selectedEnquiry.email}`} className="hover:text-brand-500 truncate">{selectedEnquiry.email}</a>
+                          {selectedEnquiry.phone && <a href={`tel:${selectedEnquiry.phone}`} className="hover:text-brand-500">{selectedEnquiry.phone}</a>}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                
+                <div className="flex items-center gap-2 self-end sm:self-start w-full sm:w-auto justify-end">
                   <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${selectedEnquiry.status === 'New' ? 'bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-500/10 dark:border-amber-500/20' :
                       selectedEnquiry.status === 'Viewed' ? 'bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-500/10 dark:border-blue-500/20' :
                         'bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-500/10 dark:border-emerald-500/20'
@@ -213,12 +223,12 @@ export default function Enquiry() {
               </div>
 
               {/* Message Body */}
-              <div className="flex-1 p-6 overflow-y-auto">
+              <div className="flex-1 p-4 sm:p-6 overflow-y-auto custom-scrollbar">
                 <div className="flex items-center gap-2 text-xs text-slate-400 mb-6 font-medium">
                   <Clock className="w-3.5 h-3.5" />
                   Received {formatDate(selectedEnquiry.createdAt)}
                 </div>
-                <div className="prose prose-sm prose-slate dark:prose-invert max-w-none">
+                <div className="prose prose-sm prose-slate dark:prose-invert max-w-none bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
                   <p className="text-slate-700 dark:text-slate-300 leading-relaxed text-sm whitespace-pre-wrap">
                     {selectedEnquiry.message}
                   </p>
@@ -226,7 +236,7 @@ export default function Enquiry() {
               </div>
 
               {/* Reply Box (Placeholder UI) */}
-              <div className="p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+              <div className="p-4 sm:p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
                 <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-brand-500 focus-within:border-transparent transition-all shadow-sm">
                   <textarea
                     className="w-full p-4 bg-transparent border-none focus:ring-0 text-sm placeholder-slate-400 dark:text-white resize-none outline-none"
@@ -239,7 +249,7 @@ export default function Enquiry() {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => updateStatus(selectedEnquiry._id, 'Replied')}
-                      className="flex items-center gap-2 px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-medium transition-all shadow-sm shadow-brand-500/20"
+                      className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white rounded-xl text-sm font-semibold transition-all shadow-md shadow-brand-500/20 w-full sm:w-auto"
                     >
                       <Mail className="w-4 h-4" />
                       Reply via Email
@@ -249,7 +259,7 @@ export default function Enquiry() {
               </div>
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center h-full text-slate-400">
+            <div className="flex flex-col items-center justify-center h-full text-slate-400 p-6 text-center">
               <MessageSquare className="w-12 h-12 mb-4 opacity-20" />
               <p>Select an enquiry to read the message</p>
             </div>
