@@ -36,7 +36,7 @@ export default function Settings() {
   }, []);
 
   const getAuthConfig = () => {
-    const admin = JSON.parse(localStorage.getItem('admin') || '{}');
+    const admin = JSON.parse(localStorage.getItem('admin_user') || '{}');
     return {
       headers: {
         Authorization: `Bearer ${admin.token}`
@@ -91,7 +91,7 @@ export default function Settings() {
         formData.append('profilePhoto', photoFile);
       }
 
-      const admin = JSON.parse(localStorage.getItem('admin') || '{}');
+      const admin = JSON.parse(localStorage.getItem('admin_user') || '{}');
       const { data } = await axios.put('https://jums-sever.onrender.com/api/auth/profile', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -100,7 +100,7 @@ export default function Settings() {
       });
       
       // Update local storage with new info
-      localStorage.setItem('admin', JSON.stringify({
+      localStorage.setItem('admin_user', JSON.stringify({
         ...admin,
         name: data.name,
         email: data.email,
