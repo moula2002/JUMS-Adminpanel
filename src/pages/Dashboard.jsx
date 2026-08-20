@@ -4,16 +4,6 @@ import StatCard from '../components/ui/StatCard';
 import axios from 'axios';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-const chartData = [
-  { name: 'Jan', applications: 400, enquiries: 240 },
-  { name: 'Feb', applications: 300, enquiries: 139 },
-  { name: 'Mar', applications: 200, enquiries: 980 },
-  { name: 'Apr', applications: 278, enquiries: 390 },
-  { name: 'May', applications: 189, enquiries: 480 },
-  { name: 'Jun', applications: 239, enquiries: 380 },
-  { name: 'Jul', applications: 349, enquiries: 430 },
-];
-
 const IconMap = {
   CreditCard,
   Users,
@@ -24,6 +14,7 @@ const IconMap = {
 export default function Dashboard() {
   const [stats, setStats] = useState([]);
   const [recentActivity, setRecentActivity] = useState([]);
+  const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -39,6 +30,7 @@ export default function Dashboard() {
         
         setStats(mappedStats);
         setRecentActivity(response.data.recentActivity);
+        setChartData(response.data.chartData || []);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching dashboard data:', error);

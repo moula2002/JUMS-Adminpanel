@@ -4,23 +4,7 @@ import { cn } from '../../lib/utils';
 import { useAuth } from '../../context/AuthContext';
 
 export default function Header({ toggleSidebar }) {
-  const [isDark, setIsDark] = useState(false);
   const { user } = useAuth();
-
-  useEffect(() => {
-    // Check initial system preference or saved preference
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setIsDark(true);
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    setIsDark(!isDark);
-    // In a real app, you'd save this to localStorage and toggle a class on the html element
-    // For now, we'll assume the OS preference handles the core tailwind dark mode if class strategy isn't used
-    // If class strategy is used in tailwind v4, we can toggle 'dark' on document.documentElement
-    document.documentElement.classList.toggle('dark');
-  };
 
   return (
     <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-x-4 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 backdrop-blur-md transition-colors duration-200">
@@ -49,13 +33,10 @@ export default function Header({ toggleSidebar }) {
           />
         </form>
         <div className="flex items-center gap-x-4 lg:gap-x-6">
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="-m-2.5 p-2.5 text-slate-400 hover:text-slate-500 dark:hover:text-slate-300 transition-colors"
-          >
-            <span className="sr-only">Toggle theme</span>
-            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          <button type="button" className="-m-2.5 p-2.5 text-slate-400 hover:text-slate-500 dark:hover:text-slate-300 relative transition-colors">
+            <span className="sr-only">View notifications</span>
+            <Bell className="h-5 w-5" aria-hidden="true" />
+            <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-slate-900"></span>
           </button>
 
           {/* Separator */}
