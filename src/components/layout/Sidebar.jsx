@@ -7,7 +7,8 @@ import {
   FileText, 
   MessageSquare,
   LogOut,
-  Briefcase
+  Briefcase,
+  FolderOpen
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useAuth } from '../../context/AuthContext';
@@ -16,9 +17,9 @@ import logoImg from '../../assets/logo.png';
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Jobs', href: '/jobs', icon: Briefcase },
-  { name: 'Users', href: '/users', icon: Users },
+  { name: 'Applications', href: '/applications', icon: FolderOpen },
   { name: 'Enquiry', href: '/enquiry', icon: MessageSquare },
-  { name: 'Settings', href: '/settings', icon: Settings },
+  { name: 'Profile Setting', href: '/settings', icon: Settings },
 ];
 
 export default function Sidebar({ onClose }) {

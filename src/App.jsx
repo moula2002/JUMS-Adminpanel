@@ -6,6 +6,9 @@ import Dashboard from './pages/Dashboard';
 import Jobs from './pages/Jobs';
 import JobForm from './pages/JobForm';
 import Login from './pages/Login';
+import Enquiry from './pages/Enquiry';
+import Applications from './pages/Applications';
+import Settings from './pages/Settings';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 // Protected Route Component
@@ -66,6 +69,9 @@ function App() {
                   <Route path="/jobs" element={<Jobs />} />
                   <Route path="/jobs/new" element={<JobForm />} />
                   <Route path="/jobs/edit/:id" element={<JobForm />} />
+                  <Route path="/enquiry" element={<Enquiry />} />
+                  <Route path="/applications" element={<Applications />} />
+                  <Route path="/settings" element={<Settings />} />
                   {/* Add more protected routes here */}
                   <Route path="*" element={<div className="p-8 text-center text-slate-500">Page not found</div>} />
                 </Routes>
