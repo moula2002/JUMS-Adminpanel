@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
   const forgotPassword = async (email) => {
     try {
       const response = await axios.post(`https://jums-sever.onrender.com/api/auth/forgotpassword`, { email });
-      return { success: true, message: response.data.message };
+      return { success: true, message: response.data.message, resetUrl: response.data.resetUrl };
     } catch (error) {
       console.error('Forgot password error:', error);
       return { 

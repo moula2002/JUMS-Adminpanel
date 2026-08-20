@@ -19,7 +19,11 @@ export default function ForgotPassword() {
     
     setIsLoading(false);
     if (result.success) {
-      setStatus({ type: 'success', message: 'Password reset link sent! Please check your email.' });
+      setStatus({ 
+        type: 'success', 
+        message: result.message,
+        resetUrl: result.resetUrl 
+      });
     } else {
       setStatus({ type: 'error', message: result.message });
     }
@@ -45,9 +49,19 @@ export default function ForgotPassword() {
           </div>
 
           {status && (
-            <div className={`mb-6 p-4 rounded-lg flex items-start gap-3 ${status.type === 'success' ? 'bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400' : 'bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400'}`}>
-              {status.type === 'success' && <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />}
-              <span className="text-sm font-medium">{status.message}</span>
+            <div className={`mb-6 p-4 rounded-lg flex flex-col items-start gap-3 ${status.type === 'success' ? 'bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400' : 'bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400'}`}>
+              <div className="flex items-start gap-3">
+                {status.type === 'success' && <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />}
+                <span className="text-sm font-medium">{status.message}</span>
+              </div>
+              {status.resetUrl && (
+                <div className="mt-2 w-full">
+                  <p className="text-xs text-green-800 dark:text-green-300 mb-1 font-semibold">Your Reset Link (Development Mode):</p>
+                  <a href={status.resetUrl} className="text-xs break-all text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 underline bg-white/50 dark:bg-black/20 p-2 rounded block">
+                    {status.resetUrl}
+                  </a>
+                </div>
+              )}
             </div>
           )}
 
