@@ -180,9 +180,7 @@ export default function Settings() {
 
   const tabs = [
     { id: 'profile', label: 'Profile', icon: User },
-    { id: 'security', label: 'Security', icon: Lock },
-    { id: 'notifications', label: 'Notifications', icon: Bell },
-    { id: 'appearance', label: 'Appearance', icon: Palette },
+    { id: 'security', label: 'Security', icon: Lock }
   ];
 
   return (
@@ -244,7 +242,15 @@ export default function Settings() {
                       <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
                         <div className="w-24 h-24 rounded-full bg-slate-100 dark:bg-slate-800 border-4 border-white dark:border-slate-900 shadow-lg flex items-center justify-center overflow-hidden">
                           {profile.profilePhoto ? (
-                            <img src={profile.profilePhoto} alt="Profile" className="w-full h-full object-cover" />
+                            <img 
+                              src={profile.profilePhoto} 
+                              alt="Profile" 
+                              className="w-full h-full object-cover" 
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = `https://ui-avatars.com/api/?name=${profile.firstName}+${profile.lastName}&background=0D8ABC&color=fff`;
+                              }}
+                            />
                           ) : (
                             <img src={`https://ui-avatars.com/api/?name=${profile.firstName}+${profile.lastName}&background=0D8ABC&color=fff`} alt="Profile" className="w-full h-full object-cover" />
                           )}
@@ -350,16 +356,7 @@ export default function Settings() {
             </div>
           )}
 
-          {activeTab !== 'profile' && activeTab !== 'security' && (
-            <div className="flex flex-col items-center justify-center py-20 px-4 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm animate-in fade-in zoom-in-95 duration-300">
-              <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
-                {activeTab === 'notifications' && <Bell className="w-8 h-8 text-slate-400" />}
-                {activeTab === 'appearance' && <Palette className="w-8 h-8 text-slate-400" />}
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white capitalize">{activeTab} Settings</h3>
-              <p className="text-sm text-slate-500 mt-2 max-w-sm">This section is currently under development. Detailed {activeTab} options will be available soon.</p>
-            </div>
-          )}
+          {/* End of content area */}
         </div>
       </div>
     </div>

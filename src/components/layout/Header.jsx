@@ -51,6 +51,10 @@ export default function Header({ toggleSidebar }) {
                   className="h-8 w-8 rounded-full bg-slate-100 object-cover ring-2 ring-slate-200 dark:ring-slate-700"
                   src={user.profilePhoto}
                   alt={user.name || 'Admin'}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = `https://ui-avatars.com/api/?name=${user.name || 'Admin'}&background=0D8ABC&color=fff`;
+                  }}
                 />
               ) : user?.name ? (
                 <div className="h-8 w-8 rounded-full bg-brand-100 dark:bg-brand-900/50 flex items-center justify-center text-brand-600 dark:text-brand-400 font-bold text-sm ring-2 ring-slate-200 dark:ring-slate-700 uppercase">
