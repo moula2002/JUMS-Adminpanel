@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Search, 
-  MessageSquare, 
-  Clock, 
-  Trash2, 
+import {
+  Search,
+  MessageSquare,
+  Clock,
+  Trash2,
   Reply,
   MoreVertical,
   CheckCircle,
@@ -69,8 +69,8 @@ export default function Enquiry() {
   };
 
   const filteredEnquiries = enquiries.filter(e => {
-    const matchesSearch = (e.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) || 
-                          (e.subject?.toLowerCase() || '').includes(searchTerm.toLowerCase());
+    const matchesSearch = (e.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+      (e.subject?.toLowerCase() || '').includes(searchTerm.toLowerCase());
     if (activeTab === 'all') return matchesSearch;
     return matchesSearch && (e.status || 'New').toLowerCase() === activeTab.toLowerCase();
   });
@@ -115,11 +115,10 @@ export default function Enquiry() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-all capitalize ${
-                  activeTab === tab 
-                    ? 'bg-white dark:bg-slate-800 text-brand-600 dark:text-brand-400 shadow-sm' 
+                className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-all capitalize ${activeTab === tab
+                    ? 'bg-white dark:bg-slate-800 text-brand-600 dark:text-brand-400 shadow-sm'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-slate-800/50'
-                }`}
+                  }`}
               >
                 {tab}
               </button>
@@ -133,21 +132,20 @@ export default function Enquiry() {
               <div className="text-center text-slate-500 mt-10">No enquiries found.</div>
             ) : (
               filteredEnquiries.map((enquiry) => (
-                <div 
-                  key={enquiry._id} 
+                <div
+                  key={enquiry._id}
                   onClick={() => {
                     setSelectedEnquiry(enquiry);
                     if (enquiry.status === 'New') {
                       updateStatus(enquiry._id, 'Viewed');
                     }
                   }}
-                  className={`p-4 rounded-xl border transition-all cursor-pointer group ${
-                    selectedEnquiry?._id === enquiry._id 
-                      ? 'bg-brand-50 dark:bg-brand-900/20 border-brand-200 dark:border-brand-800' 
-                      : (enquiry.status === 'New' 
-                          ? 'bg-white dark:bg-slate-900 border-brand-100 dark:border-brand-900/50 shadow-sm' 
-                          : 'bg-slate-50/50 dark:bg-slate-900/20 border-slate-200 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-900')
-                  }`}
+                  className={`p-4 rounded-xl border transition-all cursor-pointer group ${selectedEnquiry?._id === enquiry._id
+                      ? 'bg-brand-50 dark:bg-brand-900/20 border-brand-200 dark:border-brand-800'
+                      : (enquiry.status === 'New'
+                        ? 'bg-white dark:bg-slate-900 border-brand-100 dark:border-brand-900/50 shadow-sm'
+                        : 'bg-slate-50/50 dark:bg-slate-900/20 border-slate-200 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-900')
+                    }`}
                 >
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex items-center gap-2">
@@ -190,23 +188,22 @@ export default function Enquiry() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${
-                    selectedEnquiry.status === 'New' ? 'bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-500/10 dark:border-amber-500/20' :
-                    selectedEnquiry.status === 'Viewed' ? 'bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-500/10 dark:border-blue-500/20' :
-                    'bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-500/10 dark:border-emerald-500/20'
-                  }`}>
+                  <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${selectedEnquiry.status === 'New' ? 'bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-500/10 dark:border-amber-500/20' :
+                      selectedEnquiry.status === 'Viewed' ? 'bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-500/10 dark:border-blue-500/20' :
+                        'bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-500/10 dark:border-emerald-500/20'
+                    }`}>
                     {selectedEnquiry.status || 'New'}
                   </span>
-                  
+
                   {selectedEnquiry.status !== 'Replied' && (
-                    <button 
+                    <button
                       onClick={() => updateStatus(selectedEnquiry._id, 'Replied')}
                       title="Mark as Replied"
                       className="p-2 text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 rounded-lg transition-colors">
                       <CheckCircle className="w-5 h-5" />
                     </button>
                   )}
-                  <button 
+                  <button
                     onClick={() => deleteEnquiry(selectedEnquiry._id)}
                     title="Delete Enquiry"
                     className="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-colors">
@@ -231,13 +228,13 @@ export default function Enquiry() {
               {/* Reply Box (Placeholder UI) */}
               <div className="p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
                 <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-brand-500 focus-within:border-transparent transition-all shadow-sm">
-                  <textarea 
+                  <textarea
                     className="w-full p-4 bg-transparent border-none focus:ring-0 text-sm placeholder-slate-400 dark:text-white resize-none outline-none"
                     rows="3"
                     placeholder="Type your reply here (Functionality to be implemented)..."
                   ></textarea>
                   <div className="flex justify-end items-center p-3 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800">
-                    <button 
+                    <button
                       onClick={() => {
                         window.location.href = `mailto:${selectedEnquiry.email}?subject=Re: ${selectedEnquiry.subject || 'Your Enquiry'}`;
                         updateStatus(selectedEnquiry._id, 'Replied');

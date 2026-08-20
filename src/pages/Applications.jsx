@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Search, 
-  Briefcase, 
-  Clock, 
-  Trash2, 
+import {
+  Search,
+  Briefcase,
+  Clock,
+  Trash2,
   CheckCircle,
   FileText,
   Mail
@@ -67,8 +67,8 @@ export default function Applications() {
   };
 
   const filteredApplications = applications.filter(a => {
-    const matchesSearch = (a.fullName?.toLowerCase() || '').includes(searchTerm.toLowerCase()) || 
-                          (a.jobTitle?.toLowerCase() || '').includes(searchTerm.toLowerCase());
+    const matchesSearch = (a.fullName?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+      (a.jobTitle?.toLowerCase() || '').includes(searchTerm.toLowerCase());
     if (activeTab === 'all') return matchesSearch;
     return matchesSearch && (a.status || 'New').toLowerCase() === activeTab.toLowerCase();
   });
@@ -113,11 +113,10 @@ export default function Applications() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-all capitalize ${
-                  activeTab === tab 
-                    ? 'bg-white dark:bg-slate-800 text-brand-600 dark:text-brand-400 shadow-sm' 
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-slate-800/50'
-                }`}
+                className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-all capitalize ${activeTab === tab
+                  ? 'bg-white dark:bg-slate-800 text-brand-600 dark:text-brand-400 shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-slate-800/50'
+                  }`}
               >
                 {tab}
               </button>
@@ -131,21 +130,20 @@ export default function Applications() {
               <div className="text-center text-slate-500 mt-10">No applications found.</div>
             ) : (
               filteredApplications.map((application) => (
-                <div 
-                  key={application._id} 
+                <div
+                  key={application._id}
                   onClick={() => {
                     setSelectedApplication(application);
                     if (application.status === 'New') {
                       updateStatus(application._id, 'Viewed');
                     }
                   }}
-                  className={`p-4 rounded-xl border transition-all cursor-pointer group ${
-                    selectedApplication?._id === application._id 
-                      ? 'bg-brand-50 dark:bg-brand-900/20 border-brand-200 dark:border-brand-800' 
-                      : (application.status === 'New' 
-                          ? 'bg-white dark:bg-slate-900 border-brand-100 dark:border-brand-900/50 shadow-sm' 
-                          : 'bg-slate-50/50 dark:bg-slate-900/20 border-slate-200 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-900')
-                  }`}
+                  className={`p-4 rounded-xl border transition-all cursor-pointer group ${selectedApplication?._id === application._id
+                    ? 'bg-brand-50 dark:bg-brand-900/20 border-brand-200 dark:border-brand-800'
+                    : (application.status === 'New'
+                      ? 'bg-white dark:bg-slate-900 border-brand-100 dark:border-brand-900/50 shadow-sm'
+                      : 'bg-slate-50/50 dark:bg-slate-900/20 border-slate-200 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-900')
+                    }`}
                 >
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex items-center gap-2">
@@ -188,23 +186,22 @@ export default function Applications() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${
-                    selectedApplication.status === 'New' ? 'bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-500/10 dark:border-amber-500/20' :
+                  <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${selectedApplication.status === 'New' ? 'bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-500/10 dark:border-amber-500/20' :
                     selectedApplication.status === 'Viewed' ? 'bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-500/10 dark:border-blue-500/20' :
-                    'bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-500/10 dark:border-emerald-500/20'
-                  }`}>
+                      'bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-500/10 dark:border-emerald-500/20'
+                    }`}>
                     {selectedApplication.status || 'New'}
                   </span>
-                  
+
                   {selectedApplication.status !== 'Replied' && (
-                    <button 
+                    <button
                       onClick={() => updateStatus(selectedApplication._id, 'Replied')}
                       title="Mark as Replied"
                       className="p-2 text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 rounded-lg transition-colors">
                       <CheckCircle className="w-5 h-5" />
                     </button>
                   )}
-                  <button 
+                  <button
                     onClick={() => deleteApplication(selectedApplication._id)}
                     title="Delete Application"
                     className="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-colors">
@@ -219,7 +216,7 @@ export default function Applications() {
                   <Clock className="w-3.5 h-3.5" />
                   Applied on {formatDate(selectedApplication.createdAt)}
                 </div>
-                
+
                 <div className="mb-6">
                   <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-2">Experience Level</h3>
                   <div className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded text-sm text-slate-700 dark:text-slate-300 inline-block">
@@ -249,7 +246,7 @@ export default function Applications() {
               </div>
 
               <div className="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex justify-end">
-                <button 
+                <button
                   onClick={() => {
                     window.location.href = `mailto:${selectedApplication.email}?subject=Regarding your application for ${selectedApplication.jobTitle}`;
                     updateStatus(selectedApplication._id, 'Replied');
