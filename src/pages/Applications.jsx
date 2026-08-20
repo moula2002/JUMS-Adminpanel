@@ -67,6 +67,23 @@ export default function Applications() {
     }
   };
 
+  const handleDownloadResume = async (url, filename) => {
+    try {
+      const response = await axios.get(url, { responseType: 'blob' });
+      const blob = new Blob([response.data], { type: response.headers['content-type'] || 'application/pdf' });
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(link.href);
+    } catch (error) {
+      console.error('Error downloading resume:', error);
+      window.open(url, '_blank'); // Fallback if download fails
+    }
+  };
+
   const filteredApplications = applications.filter(a => {
     const matchesSearch = (a.fullName?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
       (a.jobTitle?.toLowerCase() || '').includes(searchTerm.toLowerCase());
@@ -242,16 +259,17 @@ export default function Applications() {
                       {selectedApplication.resumePath ? selectedApplication.resumePath.split('/').pop().split('\\').pop() : 'No resume file details saved.'}
                     </span>
                     {selectedApplication.resumePath && (
-                      <a
-                        href={`https://jums-sever.onrender.com${selectedApplication.resumePath.startsWith('/') || selectedApplication.resumePath.startsWith('\\') ? '' : '/'}${selectedApplication.resumePath.replace(/\\/g, '/')}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        download
+                      <button
+                        onClick={() => {
+                          const url = `https://jums-sever.onrender.com${selectedApplication.resumePath.startsWith('/') || selectedApplication.resumePath.startsWith('\\') ? '' : '/'}${selectedApplication.resumePath.replace(/\\/g, '/')}`;
+                          const filename = selectedApplication.resumePath.split('/').pop().split('\\').pop() || 'resume.pdf';
+                          handleDownloadResume(url, filename);
+                        }}
                         className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors whitespace-nowrap ml-auto flex-shrink-0 shadow-sm"
                       >
                         <Download className="w-3.5 h-3.5" />
                         Download
-                      </a>
+                      </button>
                     )}
                   </div>
                 </div>
@@ -259,7 +277,9 @@ export default function Applications() {
 
               <div className="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex justify-end">
                 <a
-                  href={`mailto:${selectedApplication.email}?subject=${encodeURIComponent('Regarding your application for ' + selectedApplication.jobTitle)}`}
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=${selectedApplication.email}&su=${encodeURIComponent('Regarding your application for ' + selectedApplication.jobTitle)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => updateStatus(selectedApplication._id, 'Replied')}
                   className="flex items-center gap-2 px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-medium transition-all shadow-sm shadow-brand-500/20"
                 >
