@@ -4,17 +4,21 @@ import {
   Bell, 
   Lock, 
   Shield, 
-  Globe, 
+  Globe,
   Palette,
   Save,
   Image as ImageIcon,
   Loader2,
   CheckCircle,
-  X
+  X,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 export default function Settings() {
+  const { updateUser } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
   
   // Profile State
@@ -48,6 +52,15 @@ export default function Settings() {
     try {
       const { data } = await axios.get('https://jums-sever.onrender.com/api/auth/profile', getAuthConfig());
       setProfile(data);
+      // Sync navbar with fetched profile photo
+      const admin = JSON.parse(localStorage.getItem('admin_user') || '{}');
+      if (data.profilePhoto && admin.profilePhoto !== data.profilePhoto) {
+        updateUser({
+          ...admin,
+          profilePhoto: data.profilePhoto,
+          name: data.name
+        });
+      }
     } catch (error) {
       console.error('Error fetching profile:', error);
       setMessage({ type: 'error', text: 'Failed to load profile data.' });
@@ -99,14 +112,16 @@ export default function Settings() {
         }
       });
       
-      // Update local storage with new info
-      localStorage.setItem('admin_user', JSON.stringify({
+      // Update local storage and context with new info
+      const updatedUser = {
         ...admin,
         name: data.name,
         email: data.email,
+        profilePhoto: data.profilePhoto,
         token: data.token // In case token is refreshed
-      }));
-      
+      };
+      updateUser(updatedUser);
+
       setProfile(data);
       setPhotoFile(null);
       setMessage({ type: 'success', text: 'Profile updated successfully!' });
@@ -125,6 +140,9 @@ export default function Settings() {
     confirmPassword: ''
   });
   const [securitySaving, setSecuritySaving] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
@@ -289,17 +307,32 @@ export default function Settings() {
                 <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-6">Security Settings</h2>
                 <form onSubmit={handleSavePassword}>
                   <div className="space-y-6 max-w-md">
-                    <div className="space-y-1.5">
+                    <div className="space-y-1.5 relative">
                       <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Current Password</label>
-                      <input type="password" name="currentPassword" required value={passwords.currentPassword} onChange={handlePasswordChange} className="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-colors text-sm" />
+                      <div className="relative">
+                        <input type={showCurrentPassword ? "text" : "password"} name="currentPassword" required value={passwords.currentPassword} onChange={handlePasswordChange} className="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-colors text-sm pr-10" />
+                        <button type="button" onClick={() => setShowCurrentPassword(!showCurrentPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                          {showCurrentPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
                     </div>
-                    <div className="space-y-1.5">
+                    <div className="space-y-1.5 relative">
                       <label className="text-sm font-medium text-slate-700 dark:text-slate-300">New Password</label>
-                      <input type="password" name="newPassword" required value={passwords.newPassword} onChange={handlePasswordChange} className="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-colors text-sm" />
+                      <div className="relative">
+                        <input type={showNewPassword ? "text" : "password"} name="newPassword" required value={passwords.newPassword} onChange={handlePasswordChange} className="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-colors text-sm pr-10" />
+                        <button type="button" onClick={() => setShowNewPassword(!showNewPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                          {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
                     </div>
-                    <div className="space-y-1.5">
+                    <div className="space-y-1.5 relative">
                       <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Confirm New Password</label>
-                      <input type="password" name="confirmPassword" required value={passwords.confirmPassword} onChange={handlePasswordChange} className="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-colors text-sm" />
+                      <div className="relative">
+                        <input type={showConfirmPassword ? "text" : "password"} name="confirmPassword" required value={passwords.confirmPassword} onChange={handlePasswordChange} className="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-colors text-sm pr-10" />
+                        <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                          {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
                     </div>
                   </div>
 

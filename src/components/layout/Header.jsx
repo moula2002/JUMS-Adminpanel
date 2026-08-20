@@ -57,12 +57,6 @@ export default function Header({ toggleSidebar }) {
             <span className="sr-only">Toggle theme</span>
             {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </button>
-          
-          <button type="button" className="-m-2.5 p-2.5 text-slate-400 hover:text-slate-500 dark:hover:text-slate-300 relative transition-colors">
-            <span className="sr-only">View notifications</span>
-            <Bell className="h-5 w-5" aria-hidden="true" />
-            <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-slate-900"></span>
-          </button>
 
           {/* Separator */}
           <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-slate-200 dark:lg:bg-slate-700" aria-hidden="true" />
@@ -71,7 +65,13 @@ export default function Header({ toggleSidebar }) {
           <div className="relative">
             <button type="button" className="-m-1.5 flex items-center p-1.5 hover:opacity-80 transition-opacity">
               <span className="sr-only">Open user menu</span>
-              {user?.name ? (
+              {user?.profilePhoto ? (
+                <img
+                  className="h-8 w-8 rounded-full bg-slate-100 object-cover ring-2 ring-slate-200 dark:ring-slate-700"
+                  src={user.profilePhoto}
+                  alt={user.name || 'Admin'}
+                />
+              ) : user?.name ? (
                 <div className="h-8 w-8 rounded-full bg-brand-100 dark:bg-brand-900/50 flex items-center justify-center text-brand-600 dark:text-brand-400 font-bold text-sm ring-2 ring-slate-200 dark:ring-slate-700 uppercase">
                   {user.name.charAt(0)}
                 </div>
