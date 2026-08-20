@@ -54,8 +54,44 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('admin_user', JSON.stringify(userData));
   };
 
+  const forgotPassword = async (email) => {
+    try {
+      const response = await axios.post(`https://jums-sever.onrender.com/api/auth/forgotpassword`, { email });
+      return { success: true, message: response.data.message };
+    } catch (error) {
+      console.error('Forgot password error:', error);
+      return { 
+        success: false, 
+        message: error.response?.data?.message || 'Failed to send reset email'
+      };
+    }
+  };
+
+  const resetPassword = async (token, newPassword) => {
+    try {
+      const response = await axios.put(`https://jums-sever.onrender.com/api/auth/resetpassword/${token}`, { password: newPassword });
+      return { success: true, message: response.data.message };
+    } catch (error) {
+      console.error('Reset password error:', error);
+      return { 
+        success: false, 
+        message: error.response?.data?.message || 'Failed to reset password'
+      };
+    }
+  };
+
+  const value = {
+    user,
+    login,
+    logout,
+    updateUser,
+    forgotPassword,
+    resetPassword,
+    loading
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, updateUser, loading }}>
+    <AuthContext.Provider value={value}>
       {!loading && children}
     </AuthContext.Provider>
   );
